@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var button_stop_recording:Button;
     lateinit var button_pause_recording:Button;
 
+    lateinit var soundMeter: SoundMeter;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         mediaRecorder?.setOutputFile(output)
 
         button_start_recording = findViewById(R.id.button_start_recording)
-        button_start_recording.setOnClickListener {
+        /*button_start_recording.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -56,12 +58,23 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, permissions,0)
             }
             startRecording()
+        }*/
+
+        soundMeter = SoundMeter();
+        soundMeter.context = this;
+
+        button_start_recording.setOnClickListener {
+            soundMeter.start()
         }
+
 
         button_stop_recording = findViewById(R.id.button_stop_recording)
 
         button_stop_recording.setOnClickListener{
-            stopRecording()
+            //stopRecording()
+            soundMeter.stop()
+            Toast.makeText(this, "Decibels: ${soundMeter.amplitude}", Toast.LENGTH_SHORT).show()
+
         }
 
         button_pause_recording = findViewById(R.id.button_pause_recording)
