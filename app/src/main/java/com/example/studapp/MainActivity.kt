@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.IOException
+import java.util.*
 import kotlin.math.log10
 import kotlin.math.round
 
@@ -120,7 +121,8 @@ class MainActivity : AppCompatActivity() {
                         button_pause_recording.text =
                             "${lastLoction?.latitude}\n${lastLoction?.longitude}"
                     }
-
+                    var time = Date()
+                    Log.d("aaa", time.toString());
                     //TODO send http request to server
                     //noise, lat, lon , time.
 
