@@ -33,10 +33,6 @@ import kotlin.math.round
 class MainActivity : AppCompatActivity() {
 
 
-    lateinit var button_start_recording: Button;
-    lateinit var button_stop_recording:Button;
-    lateinit var button_pause_recording:Button;
-
     lateinit var mainHandler: Handler
 
     private var updateTextTask: Runnable?  = null;
@@ -104,8 +100,6 @@ class MainActivity : AppCompatActivity() {
         )
         activityResultLauncher.launch(appPerms)
 
-        button_start_recording = findViewById(R.id.button_start_recording)
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED ) {
            updateTextTask =   object : Runnable {
@@ -115,12 +109,7 @@ class MainActivity : AppCompatActivity() {
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, 10000)
                     var noiseDb = round(noiseRecorder.noiseLevel);
-                    button_start_recording.text = noiseDb.toString();
 
-                    if(lastLoction != null) {
-                        button_pause_recording.text =
-                            "${lastLoction?.latitude}\n${lastLoction?.longitude}"
-                    }
                     var time = Date()
                     Log.d("aaa", time.toString());
                     //TODO send http request to server
@@ -129,29 +118,6 @@ class MainActivity : AppCompatActivity() {
                     Log.d("aaa", lastLoction.toString())
                 }
             }
-        }
-
-
-
-
-        button_start_recording.setOnClickListener {
-            Toast.makeText(this, "Recording started!", Toast.LENGTH_SHORT).show()
-        }
-
-
-        button_stop_recording = findViewById(R.id.button_stop_recording)
-
-        button_stop_recording.setOnClickListener{
-
-            Toast.makeText(this, "Decibels: soundMeter.amp", Toast.LENGTH_SHORT).show()
-
-        }
-
-        button_pause_recording = findViewById(R.id.button_pause_recording)
-
-        button_pause_recording.setOnClickListener {
-
-
         }
 
         mainHandler = Handler(Looper.getMainLooper())
