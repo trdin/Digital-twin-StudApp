@@ -28,6 +28,7 @@
         android:valueTo="60"
         android:stepSize="1"
         android:value="10"
+        app:labelBehavior="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/tvFrequency" />
