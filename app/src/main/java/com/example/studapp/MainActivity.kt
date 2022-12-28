@@ -3,20 +3,15 @@ package com.example.studapp
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.Location
-import android.media.MediaRecorder
 import android.os.*
 import android.util.Log
-import android.widget.Button
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.studapp.databinding.ActivityMainBinding
@@ -27,9 +22,7 @@ import com.google.android.gms.tasks.Task
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.IOException
 import java.util.*
-import kotlin.math.log10
 import kotlin.math.round
 
 class MainActivity : AppCompatActivity() {
@@ -38,10 +31,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainHandler: Handler
     lateinit var binding: ActivityMainBinding
 
-    private var updateTextTask: Runnable? = null;
+    private var updateTextTask: Runnable? = null
 
     //location
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
+    private var activityResultLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var fusedLocationClient: FusedLocationProviderClient //https://developer.android.com/training/location/retrieve-current
     private var lastLoction: Location? = null
     private var locationCallback: LocationCallback
@@ -50,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     init {
 
-        //fixed the decprication
+        //fixed the deprecation
         locationRequest = LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 100)
             .setWaitForAccurateLocation(false)
             .setMinUpdateIntervalMillis(3000)
@@ -58,11 +51,11 @@ class MainActivity : AppCompatActivity() {
             .build()
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                locationResult ?: return
+
                 for (location in locationResult.locations) {
                     // Update UI with location data
                     //updateLocation(location) //MY function
-                    this@MainActivity.lastLoction = location;
+                    this@MainActivity.lastLoction = location
                 }
             }
         }
@@ -136,14 +129,14 @@ class MainActivity : AppCompatActivity() {
         ) {
             updateTextTask = object : Runnable {
                 override fun run() {
-                    var noiseRecorder = NoiseRecorder();
-                    noiseRecorder.context = this@MainActivity;
+                    val noiseRecorder = NoiseRecorder()
+                    noiseRecorder.context = this@MainActivity
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, 10000)
-                    var noiseDb = round(noiseRecorder.noiseLevel);
+                    var noiseDb = round(noiseRecorder.noiseLevel)
 
-                    var time = Date()
-                    Log.d("aaa", time.toString());
+                    val time = Date()
+                    Log.d("aaa", time.toString())
                     //TODO send http request to server
                     //noise, lat, lon , time.
 
@@ -184,12 +177,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this)
     }
 
     override fun onStop() {
         super.onStop()
-        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -273,11 +266,15 @@ class MainActivity : AppCompatActivity() {
         val REQUEST_CHECK_SETTINGS = 20202
     }
 
+    fun getLastKnownLocation(): Location? {
+        return lastLoction
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CHECK_SETTINGS) {
-            if (resultCode == AppCompatActivity.RESULT_OK) {
-                initLoaction();
+            if (resultCode == RESULT_OK) {
+                initLoaction()
             }
         }
     }
