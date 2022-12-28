@@ -18,6 +18,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.example.studapp.databinding.ActivityMainBinding
 import com.example.studapp.location.MyEventLocationSettingsChange
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -34,8 +36,9 @@ class MainActivity : AppCompatActivity() {
 
 
     lateinit var mainHandler: Handler
+    lateinit var binding: ActivityMainBinding
 
-    private var updateTextTask: Runnable?  = null;
+    private var updateTextTask: Runnable? = null;
 
     //location
     private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
@@ -45,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     private var locationRequest: LocationRequest
     private var requestingLocationUpdates = false
 
-    init{
+    init {
 
         //fixed the decprication
         locationRequest = LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 100)
@@ -71,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 allAreGranted = allAreGranted && b
             }
 
-            Log.d("aaa" ,"$allAreGranted")
+            Log.d("aaa", "$allAreGranted")
             if (allAreGranted) {
                 initCheckLocationSettings()
                 //initMap() if settings are ok
@@ -81,7 +84,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         /*if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
@@ -89,6 +93,31 @@ class MainActivity : AppCompatActivity() {
             val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
             ActivityCompat.requestPermissions(this, permissions,0)
         }*/
+        val homeFragment: Fragment = HomeFragment()
+        val mapFragment: Fragment = MapFragment()
+        val settingsFragment: Fragment = SettingsFragment()
+
+        replaceFragment(homeFragment)
+
+        binding.btvNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.icHome -> {
+                    replaceFragment(homeFragment)
+                    true
+                }
+                R.id.icMap -> {
+                    replaceFragment(mapFragment)
+                    true
+                }
+                R.id.icSettings -> {
+                    replaceFragment(settingsFragment)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
 
         val appPerms = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -100,9 +129,12 @@ class MainActivity : AppCompatActivity() {
         )
         activityResultLauncher.launch(appPerms)
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED ) {
-           updateTextTask =   object : Runnable {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            updateTextTask = object : Runnable {
                 override fun run() {
                     var noiseRecorder = NoiseRecorder();
                     noiseRecorder.context = this@MainActivity;
@@ -123,12 +155,18 @@ class MainActivity : AppCompatActivity() {
         mainHandler = Handler(Looper.getMainLooper())
     }
 
+    private fun replaceFragment(fragment: Fragment) {
 
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.baseFragment, fragment)
+            commit()
+        }
+    }
 
 
     override fun onPause() {
         super.onPause()
-        if(updateTextTask != null){
+        if (updateTextTask != null) {
             mainHandler.removeCallbacks(updateTextTask!!)
         }
         if (requestingLocationUpdates) {
@@ -139,7 +177,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(updateTextTask != null) {
+        if (updateTextTask != null) {
             mainHandler.post(updateTextTask!!)
         }
     }
@@ -163,7 +201,7 @@ class MainActivity : AppCompatActivity() {
                 startLocationUpdates()
             }
         } else {
-            Log.d("aaa","Stop something")
+            Log.d("aaa", "Stop something")
         }
     }
 
@@ -173,7 +211,7 @@ class MainActivity : AppCompatActivity() {
         val client: SettingsClient = LocationServices.getSettingsClient(this)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
         task.addOnSuccessListener { locationSettingsResponse ->
-           // Timber.d("Settings Location IS OK")
+            // Timber.d("Settings Location IS OK")
             MyEventLocationSettingsChange.globalState = true //default
             //initMap()
             initLoaction()
@@ -196,12 +234,13 @@ class MainActivity : AppCompatActivity() {
                     )
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
-                    Log.d("aaa","Settings Location sendEx??")
+                    Log.d("aaa", "Settings Location sendEx??")
                 }
             }
         }
 
     }
+
     private fun stopLocationUpdates() { //onPause
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
@@ -228,7 +267,6 @@ class MainActivity : AppCompatActivity() {
             Looper.getMainLooper()
         )
     }
-
 
 
     companion object {
