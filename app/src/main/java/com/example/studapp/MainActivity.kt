@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         )
         activityResultLauncher.launch(appPerms)
 
-        button_start_recording = findViewById(R.id.button_start_recording)
+//        button_start_recording = findViewById(R.id.button_start_recording)
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED ) {
@@ -131,15 +131,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
-
         button_start_recording.setOnClickListener {
             Toast.makeText(this, "Recording started!", Toast.LENGTH_SHORT).show()
         }
 
 
-        button_stop_recording = findViewById(R.id.button_stop_recording)
+//        button_stop_recording = findViewById(R.id.button_stop_recording)
 
         button_stop_recording.setOnClickListener{
 
@@ -147,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        button_pause_recording = findViewById(R.id.button_pause_recording)
+//        button_pause_recording = findViewById(R.id.button_pause_recording)
 
         button_pause_recording.setOnClickListener {
 
