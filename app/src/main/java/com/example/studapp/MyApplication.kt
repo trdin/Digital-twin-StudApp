@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.StrictMode
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -54,10 +53,10 @@ class MyApplication : Application() {
         }
     }
 
-    // okHTTP
-    fun getRequest(resource: String): String {
+    /** okHTTP */
+    private fun getRequest(url: String, resource: String): String {
         val request = Request.Builder()
-            .url(MAIN_API_URL + resource)
+            .url(url + resource)
             .build()
 
         okClient.newCall(request).execute().use { response ->
@@ -66,12 +65,11 @@ class MyApplication : Application() {
         }
     }
 
-    fun postRequest(resource: String, postBody: String): String {
+    private fun postRequest(url: String, resource: String, postBody: String): String {
         val postBodyStr = postBody.trimMargin()
         val request = Request.Builder()
-            .url(MAIN_API_URL + resource)
-//            .url("https://reqres.in/api/users") // TODO remove testing url
-            .post(postBodyStr.toRequestBody(MEDIA_TYPE_MARKDOWN))
+            .url(url + resource)
+            .post(postBodyStr.toRequestBody(MEDIA_TYPE_JSON))
             .build()
 
         okClient.newCall(request).execute().use { response ->
@@ -80,32 +78,21 @@ class MyApplication : Application() {
         }
     }
 
+    // Main API
+    fun getMainRequest(resource: String): String {
+        return getRequest(MAIN_API_URL, resource)
+    }
 
+    fun postMainRequest(resource: String, postBody: String): String {
+        return postRequest(MAIN_API_URL, resource, postBody)
+    }
+
+    // Blockchain API
     fun getRequestChain(resource: String): String {
-        val request = Request.Builder()
-            .url(BLOCKCHAIN_API_URL + resource)
-            .build()
-
-        okClient.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            return response.body!!.string()
-        }
+        return getRequest(BLOCKCHAIN_API_URL, resource)
     }
 
     fun postChain(resource: String, postBody: String): String {
-       // val postBodyStr = postBody.trimMargin()
-
-        val request = Request.Builder()
-            .url(BLOCKCHAIN_API_URL + resource)
-//            .url("https://reqres.in/api/users") // TODO remove testing url
-            .post(postBody.toRequestBody(MEDIA_TYPE_JSON))
-            .build()
-
-        okClient.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            return response.body!!.string()
-        }
+        return postRequest(BLOCKCHAIN_API_URL, resource, postBody)
     }
-
-
 }

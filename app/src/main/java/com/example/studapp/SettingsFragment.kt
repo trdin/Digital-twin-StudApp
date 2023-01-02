@@ -55,7 +55,7 @@ class SettingsFragment : Fragment() {
 
         binding.btnDevGetReq.setOnClickListener { // TODO move to dev fragment/activity
             try {
-                val str = app.getRequest("restaurants") // TODO change to messages
+                val str = app.getMainRequest("restaurants") // TODO change to messages
                 Timber.tag("dev_get_req").d(str)
             } catch (ex: IOException) {
                 Timber.tag("dev_get_req").e(ex)
@@ -78,7 +78,7 @@ class SettingsFragment : Fragment() {
                         "_id": "62adb097ceb7bcedfab61bf7",
                         "__v": 0
                     }"""
-                val str = app.postRequest("restaurants", strRes) // TODO change to messages
+                val str = app.postMainRequest("restaurants", strRes) // TODO change to messages
                 Timber.tag("dev_post_req").d(str)
             } catch (ex: IOException) {
                 Timber.tag("dev_post_req").e(ex)
