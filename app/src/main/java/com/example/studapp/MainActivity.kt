@@ -16,17 +16,22 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.studapp.databinding.ActivityMainBinding
 import com.example.studapp.location.MyEventLocationSettingsChange
+import com.example.studapp.utils.NoiseJsonObject
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
+import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import timber.log.Timber
+import java.io.IOException
 import java.util.*
 import kotlin.math.round
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var app: MyApplication
 
     lateinit var mainHandler: Handler
     lateinit var binding: ActivityMainBinding
@@ -36,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     //location
     private var activityResultLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var fusedLocationClient: FusedLocationProviderClient //https://developer.android.com/training/location/retrieve-current
-    private var lastLoction: Location? = null
+    private var lastLocation: Location? = null
     private var locationCallback: LocationCallback
     private var locationRequest: LocationRequest
     private var requestingLocationUpdates = false
@@ -55,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 for (location in locationResult.locations) {
                     // Update UI with location data
                     //updateLocation(location) //MY function
-                    this@MainActivity.lastLoction = location
+                    this@MainActivity.lastLocation = location
                 }
             }
         }
@@ -68,6 +73,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             Log.d("aaa", "$allAreGranted")
+
             if (allAreGranted) {
                 initCheckLocationSettings()
                 //initMap() if settings are ok
@@ -79,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        app = (this.application as MyApplication)
 
         /*if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
@@ -135,12 +142,21 @@ class MainActivity : AppCompatActivity() {
                     mainHandler.postDelayed(this, 10000)
                     var noiseDb = round(noiseRecorder.noiseLevel)
 
-                    val time = Date()
-                    Log.d("aaa", time.toString())
-                    //TODO send http request to server
-                    //noise, lat, lon , time.
+                    try {
+                        if (lastLocation != null) {
+                            var jsonObj = NoiseJsonObject();
+                            jsonObj.noise = noiseDb;
+                            jsonObj.lat = lastLocation!!.latitude.toString()
+                            jsonObj.lon = lastLocation!!.longitude.toString()
+                            jsonObj.time = Date().toString();
 
-                    Log.d("aaa", lastLoction.toString())
+                            app.postChain("noise", Gson().toJson(jsonObj))
+                        }
+                    } catch (ex: IOException) {
+                        Timber.tag("dev_post_req").e(ex)
+                        mainHandler.removeCallbacks(updateTextTask!!);
+                    }
+                    //noise, lat, lon , time.
                 }
             }
         }
@@ -248,7 +264,7 @@ class MainActivity : AppCompatActivity() {
     fun readLastKnownLocation() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                location?.let { this.lastLoction = it }
+                location?.let { this.lastLocation = it }
             }
     }
 
@@ -267,7 +283,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getLastKnownLocation(): Location? {
-        return lastLoction
+        return lastLocation
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
