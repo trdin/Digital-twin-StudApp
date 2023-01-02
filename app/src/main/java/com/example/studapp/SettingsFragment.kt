@@ -2,13 +2,14 @@ package com.example.studapp
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.studapp.databinding.FragmentSettingsBinding
+import timber.log.Timber
+import java.io.IOException
 
 
 class SettingsFragment : Fragment() {
@@ -31,27 +32,57 @@ class SettingsFragment : Fragment() {
         app = (activity?.application as MyApplication)
         (activity as MainActivity).supportActionBar?.title = "Settings"
 
-        frequency = app.sharedPref.getFloat(frequencyString, 10f)
+        frequency = app.sharedPref.getFloat(MyApplication.FREQUENCY_STRING, 10f)
         binding.slFrequency.value = frequency
 
         binding.btnSave.setOnClickListener {
             val newFrequency = binding.slFrequency.value
-            if(newFrequency != frequency) {
+            if (newFrequency != frequency) {
                 val editor: SharedPreferences.Editor = app.sharedPref.edit()
                 try {
                     frequency = newFrequency
-                    editor.putFloat(frequencyString, newFrequency)
+                    editor.putFloat(MyApplication.FREQUENCY_STRING, newFrequency)
                     editor.apply()
                     Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show()
                 } catch (ex: Exception) {
-                    Log.i("SharedPref", ex.message.toString())
+                    Timber.tag("SharedPref").e(ex.message.toString())
                     Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
                 }
-            }else {
+            } else {
                 Toast.makeText(activity, "Already set", Toast.LENGTH_SHORT).show()
             }
         }
 
-    }
+        binding.btnDevGetReq.setOnClickListener { // TODO move to dev fragment/activity
+            try {
+                val str = app.getRequest("restaurants") // TODO change to messages
+                Timber.tag("dev_get_req").d(str)
+            } catch (ex: IOException) {
+                Timber.tag("dev_get_req").e(ex)
+            }
+        }
 
+        binding.btnDevPostReq.setOnClickListener { // TODO move to dev fragment/activity
+            try {
+                val strRes = """
+                    |{"name": "Tester",
+                        "address": "Gosposvetska cesta 83, Maribor",
+                        "location": {
+                            "type": "Point",
+                            "coordinates": [
+                                1.2345,
+                                1.2345
+                            ]
+                        },
+                        "dataSeries": "627531cfbc8191993bdd9397",
+                        "_id": "62adb097ceb7bcedfab61bf7",
+                        "__v": 0
+                    }"""
+                val str = app.postRequest("restaurants", strRes) // TODO change to messages
+                Timber.tag("dev_post_req").d(str)
+            } catch (ex: IOException) {
+                Timber.tag("dev_post_req").e(ex)
+            }
+        }
+    }
 }
