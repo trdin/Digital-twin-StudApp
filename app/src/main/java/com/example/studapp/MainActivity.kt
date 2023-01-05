@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
                     try {
                         if (lastLocation != null) {
-                            val jsonObj = NoiseJsonObject()
+                            var jsonObj = NoiseJsonObject()
                             jsonObj.noise = noiseDb
                             jsonObj.lat = lastLocation!!.latitude.toString()
                             jsonObj.lon = lastLocation!!.longitude.toString()

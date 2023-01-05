@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="DevSimulatedPlaces">
+        <item>Eat smart FERI</item>
+        <item>Eat smart Koroška</item>
+        <item>Baščaršija Gosposvetska</item>
+        <item>Mango</item>
+        <item>Papagayo</item>
+    </array>
+</resources>

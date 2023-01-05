@@ -13,7 +13,7 @@ class MyEventLocationSettingsChange(val on:Boolean) {
          */
         fun setChangeAndPost(_on:Boolean) {
             if (globalState !=_on) { //Send Just Change
-                globalState = _on;
+                globalState = _on
                 EventBus.getDefault().post(MyEventLocationSettingsChange(_on))
             }
         }

@@ -16,12 +16,12 @@ import kotlinx.coroutines.runBlocking
 
 class NoiseRecorder {
     private val TAG: String = "aaa"
-    lateinit var context: Context;
+    lateinit var context: Context
     //the value 51805.5336 can be derived from asuming that x=32767=0.6325 Pa and x=1 = 0.00002 Pa (the reference value)
 
     //making the buffer bigger....
-    //recording data;
-    //x=max;
+    //recording data
+    //x=max
     val noiseLevel: Double
         // calculating the pascal pressure based on the idea that the max amplitude (between 0 and 32767) is
         // relative to the pressure
@@ -65,7 +65,7 @@ class NoiseRecorder {
                         bufferSize--
                     }
                 }
-                //x=max;
+                //x=max
                 val x = average / bufferSize
                 Log.e(TAG, "" + x)
                 recorder.release()
@@ -82,8 +82,8 @@ class NoiseRecorder {
 
                 /* }
              }*/
-                return db;
-                //recording data;
+                return db
+                //recording data
 
             }
             return 0.0

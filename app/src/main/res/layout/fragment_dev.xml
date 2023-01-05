@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DevFragment">
+
+    <Button
+        android:id="@+id/btnDevGetReq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/btnDevGetReq"
+        app:layout_constraintStart_toStartOf="@+id/tvDevOkHttpTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevOkHttpTitle" />
+
+    <Button
+        android:id="@+id/btnDevPostReq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btnDevPostReq"
+        app:layout_constraintStart_toStartOf="@+id/btnDevGetReq"
+        app:layout_constraintTop_toBottomOf="@+id/btnDevGetReq" />
+
+    <TextView
+        android:id="@+id/tvDevGetReq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:maxLines="3"
+        android:text="@string/response"
+        app:layout_constraintStart_toEndOf="@+id/btnDevGetReq"
+        app:layout_constraintTop_toTopOf="@+id/btnDevGetReq" />
+
+    <TextView
+        android:id="@+id/tvDevPostReq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:maxLines="3"
+        android:text="@string/response"
+        app:layout_constraintStart_toEndOf="@+id/btnDevPostReq"
+        app:layout_constraintTop_toTopOf="@+id/btnDevPostReq" />
+
+    <TextView
+        android:id="@+id/tvDevTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/devTitle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDevOkHttpTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/DevOkHttpTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevTitle" />
+
+    <TextView
+        android:id="@+id/tvDevSimulatedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/DevSimulatedTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDevPostReq" />
+
+    <Spinner
+        android:id="@+id/spDevSimulatedPlaces"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-16dp"
+        android:layout_marginEnd="32dp"
+        android:background="?colorPrimary"
+        android:entries="@array/DevSimulatedPlaces"
+        android:popupBackground="?colorPrimary"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tvDevSimLocation"
+        app:layout_constraintTop_toTopOf="@+id/tvDevSimLocation" />
+
+    <EditText
+        android:id="@+id/etDevSimRangeMin"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-16dp"
+        android:autofillHints="unsigned int"
+        android:ems="10"
+        android:hint="@string/DevSimRangeMin"
+        android:inputType="number"
+        android:maxLength="2"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/tvDevSimRange"
+        app:layout_constraintTop_toTopOf="@+id/tvDevSimRange" />
+
+    <TextView
+        android:id="@+id/tvDevSimLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/DevSimLocation"
+        app:layout_constraintStart_toStartOf="@+id/tvDevSimulatedTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevSimulatedTitle" />
+
+    <TextView
+        android:id="@+id/tvDevSimRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/DevSimRange"
+        app:layout_constraintStart_toStartOf="@+id/tvDevSimLocation"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevSimLocation" />
+
+    <EditText
+        android:id="@+id/etDevSimRangeMax"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:autofillHints="unsigned int"
+        android:ems="10"
+        android:hint="@string/DevSimRangeMax"
+        android:inputType="number"
+        android:maxLength="2"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/tvDevSimRangeIndicator"
+        app:layout_constraintTop_toTopOf="@+id/etDevSimRangeMin" />
+
+    <TextView
+        android:id="@+id/tvDevSimRangeIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/DevSimRangeIndicator"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/etDevSimRangeMin"
+        app:layout_constraintTop_toTopOf="@+id/etDevSimRangeMin" />
+
+    <TextView
+        android:id="@+id/tvDevSimInterval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/DevSimInterval"
+        app:layout_constraintStart_toStartOf="@+id/tvDevSimRange"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevSimRange" />
+
+    <EditText
+        android:id="@+id/etDevSimInterval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-16dp"
+        android:autofillHints="unsigned int"
+        android:ems="10"
+        android:hint="@string/DevSimIntervalSeconds"
+        android:inputType="number|numberDecimal"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toEndOf="@+id/tvDevSimInterval"
+        app:layout_constraintTop_toTopOf="@+id/tvDevSimInterval" />
+
+    <TextView
+        android:id="@+id/tvDevSimRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/DevSimRepeat"
+        app:layout_constraintStart_toStartOf="@+id/tvDevSimInterval"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevSimInterval" />
+
+    <EditText
+        android:id="@+id/etDevSimRepeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-16dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/etDevSimRepeat"
+        android:inputType="number"
+        android:minHeight="48dp"
+        app:layout_constraintStart_toEndOf="@+id/tvDevSimRepeat"
+        app:layout_constraintTop_toTopOf="@+id/tvDevSimRepeat" />
+
+    <Button
+        android:id="@+id/btnDevSimStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/DevSimStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDevSimRepeat" />
+
+    <Button
+        android:id="@+id/btnDevSimStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/DevSimStop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDevSimStart" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
