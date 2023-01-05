@@ -144,17 +144,17 @@ class MainActivity : AppCompatActivity() {
 
                     try {
                         if (lastLocation != null) {
-                            var jsonObj = NoiseJsonObject();
-                            jsonObj.noise = noiseDb;
+                            var jsonObj = NoiseJsonObject()
+                            jsonObj.noise = noiseDb
                             jsonObj.lat = lastLocation!!.latitude.toString()
                             jsonObj.lon = lastLocation!!.longitude.toString()
-                            jsonObj.time = Date().toString();
+                            jsonObj.time = Date().toString()
 
                             app.postChain("noise", Gson().toJson(jsonObj))
                         }
                     } catch (ex: IOException) {
                         Timber.tag("dev_post_req").e(ex)
-                        mainHandler.removeCallbacks(updateTextTask!!);
+                        mainHandler.removeCallbacks(updateTextTask!!)
                     }
                     //noise, lat, lon , time.
                 }
