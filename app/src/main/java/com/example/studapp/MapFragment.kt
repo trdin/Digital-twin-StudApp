@@ -32,7 +32,7 @@ class MapFragment : Fragment() {
     private var userLocation: Location? = null
     lateinit var mainHandler: Handler
 
-    var startPoint: GeoPoint = GeoPoint(46.553421, 15.645539) // Maribor Center
+    private var startPoint: GeoPoint = GeoPoint(46.553421, 15.645539) // Maribor Center
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,25 +81,25 @@ class MapFragment : Fragment() {
 
         val noiseData = app.getRequestChain("")
 //        val noiseData = app.getRequestChain("noise") Needs to be implemented
-        if(!noiseData.isEmpty()) {
-            val JArray = JSONArray(noiseData)
-            for(i in 0 until JArray.length()) {
+        if(noiseData.isNotEmpty()) {
+            val jArray = JSONArray(noiseData)
+            for(i in 0 until jArray.length()) {
                 var lat  = 0.0
                 var lon  = 0.0
                 var time = ""
                 var noise = 0.0
-                val JObject: JSONObject = JArray[i] as JSONObject
-                if(JObject.has("lat")) {
-                    lat = JObject.getString("lat").toDouble()
+                val jObject: JSONObject = jArray[i] as JSONObject
+                if(jObject.has("lat")) {
+                    lat = jObject.getString("lat").toDouble()
                 }
-                if(JObject.has("lon")) {
-                    lon = JObject.getString("lon").toDouble()
+                if(jObject.has("lon")) {
+                    lon = jObject.getString("lon").toDouble()
                 }
-                if(JObject.has("time")) {
-                    time = JObject.getString("time")
+                if(jObject.has("time")) {
+                    time = jObject.getString("time")
                 }
-                if(JObject.has("noise")) {
-                    noise = JObject.getString("noise").toDouble()
+                if(jObject.has("noise")) {
+                    noise = jObject.getString("noise").toDouble()
                 }
                 val point = GeoPoint(lat, lon)
                 val marker = Marker(map)

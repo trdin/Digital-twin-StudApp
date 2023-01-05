@@ -14,7 +14,6 @@ import timber.log.Timber
 class SettingsFragment : Fragment()  {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-    private var frequency: Float = 10f
     private lateinit var app: MyApplication
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +30,15 @@ class SettingsFragment : Fragment()  {
         app = (activity?.application as MyApplication)
         (activity as MainActivity).supportActionBar?.title = "Settings"
 
-        frequency = app.sharedPref.getFloat(MyApplication.FREQUENCY_STRING, 10f)
-        binding.slFrequency.value = frequency
+
+        binding.slFrequency.value = app.frequency
 
         binding.btnSave.setOnClickListener {
             val newFrequency = binding.slFrequency.value
-            if (newFrequency != frequency) {
+            if (newFrequency != app.frequency) {
                 val editor: SharedPreferences.Editor = app.sharedPref.edit()
                 try {
-                    frequency = newFrequency
+                    app.frequency = newFrequency
                     editor.putFloat(MyApplication.FREQUENCY_STRING, newFrequency)
                     editor.apply()
                     Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show()

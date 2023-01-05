@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var app: MyApplication
 
-    lateinit var mainHandler: Handler
-    lateinit var binding: ActivityMainBinding
+    private lateinit var mainHandler: Handler
+    private lateinit var binding: ActivityMainBinding
 
     private var updateTextTask: Runnable? = null
 
@@ -139,12 +139,12 @@ class MainActivity : AppCompatActivity() {
                     val noiseRecorder = NoiseRecorder()
                     noiseRecorder.context = this@MainActivity
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
-                    mainHandler.postDelayed(this, 10000)
+                    mainHandler.postDelayed(this, ((app.frequency * 1000).toLong()))
                     val noiseDb = round(noiseRecorder.noiseLevel)
 
                     try {
                         if (lastLocation != null) {
-                            var jsonObj = NoiseJsonObject()
+                            val jsonObj = NoiseJsonObject()
                             jsonObj.noise = noiseDb
                             jsonObj.lat = lastLocation!!.latitude.toString()
                             jsonObj.lon = lastLocation!!.longitude.toString()
@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMsg(status: MyEventLocationSettingsChange) {
         if (status.on) {
-            initLoaction()
+            initLocation()
             if (!requestingLocationUpdates) {
                 requestingLocationUpdates = true
                 startLocationUpdates()
@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initCheckLocationSettings() {
+    private fun initCheckLocationSettings() {
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
         val client: SettingsClient = LocationServices.getSettingsClient(this)
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
             // Timber.d("Settings Location IS OK")
             MyEventLocationSettingsChange.globalState = true //default
             //initMap()
-            initLoaction()
+            initLocation()
             // All location settings are satisfied. The client can initialize
             // location requests here.
             // ...
@@ -253,14 +253,14 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    fun initLoaction() { //call in create
+    private fun initLocation() { //call in create
         fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(this)
         readLastKnownLocation()
     }
 
     @SuppressLint("MissingPermission") //permission are checked before
-    fun readLastKnownLocation() {
+    private fun readLastKnownLocation() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 location?.let { this.lastLocation = it }
@@ -277,7 +277,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        val REQUEST_CHECK_SETTINGS = 20202
+        const val REQUEST_CHECK_SETTINGS = 20202
     }
 
     fun getLastKnownLocation(): Location? {
@@ -288,7 +288,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CHECK_SETTINGS) {
             if (resultCode == RESULT_OK) {
-                initLoaction()
+                initLocation()
             }
         }
     }

@@ -15,6 +15,7 @@ import java.io.IOException
 class MyApplication : Application() {
     lateinit var sharedPref: SharedPreferences
     lateinit var okClient: OkHttpClient
+    var frequency = 1.0f
 
     companion object {
         val MEDIA_TYPE_MARKDOWN = "text/x-markdown; charset=utf-8".toMediaType()
@@ -50,6 +51,8 @@ class MyApplication : Application() {
             } catch (ex: Exception) {
                 Timber.tag("SharedPref").e(ex.message.toString())
             }
+        }else {
+            frequency = sharedPref.getFloat(FREQUENCY_STRING, 10f)
         }
     }
 
