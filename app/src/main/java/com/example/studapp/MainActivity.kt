@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                     noiseRecorder.context = this@MainActivity
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, 10000)
-                    var noiseDb = round(noiseRecorder.noiseLevel)
+                    val noiseDb = round(noiseRecorder.noiseLevel)
 
                     try {
                         if (lastLocation != null) {
@@ -247,7 +247,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun stopLocationUpdates() { //onPause
@@ -276,7 +275,6 @@ class MainActivity : AppCompatActivity() {
             Looper.getMainLooper()
         )
     }
-
 
     companion object {
         val REQUEST_CHECK_SETTINGS = 20202

@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.example.studapp.databinding.FragmentMapBinding
+import org.json.JSONArray
+import org.json.JSONObject
 import org.osmdroid.api.IMapController
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -19,6 +21,8 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
 class MapFragment : Fragment() {
+
+    private lateinit var app: MyApplication
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
     private lateinit var map: MapView
@@ -39,7 +43,7 @@ class MapFragment : Fragment() {
             .load(activity?.applicationContext, activity?.getPreferences(Context.MODE_PRIVATE))
 
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-
+        app = (activity?.application as MyApplication)
         map = binding.mvMap
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
@@ -69,8 +73,64 @@ class MapFragment : Fragment() {
         }
         mainHandler = Handler(Looper.getMainLooper())
 
-
+        drawMarkersFromData()
         return binding.root
+    }
+
+    private fun drawMarkersFromData(){
+
+        val noiseData = app.getRequestChain("")
+//        val noiseData = app.getRequestChain("noise") Needs to be implemented
+        if(!noiseData.isEmpty()) {
+            val JArray = JSONArray(noiseData)
+            for(i in 0 until JArray.length()) {
+                var lat  = 0.0
+                var lon  = 0.0
+                var time = ""
+                var noise = 0.0
+                val JObject: JSONObject = JArray[i] as JSONObject
+                if(JObject.has("lat")) {
+                    lat = JObject.getString("lat").toDouble()
+                }
+                if(JObject.has("lon")) {
+                    lon = JObject.getString("lon").toDouble()
+                }
+                if(JObject.has("time")) {
+                    time = JObject.getString("time")
+                }
+                if(JObject.has("noise")) {
+                    noise = JObject.getString("noise").toDouble()
+                }
+                val point = GeoPoint(lat, lon)
+                val marker = Marker(map)
+                when(noise) {
+                    in 0.0 .. 35.0-> {
+                        marker.title = "Exceptional"
+                    }
+                    in 35.0 .. 45.00 -> {
+                        marker.title = "Excellent"
+                    }
+                    in 45.0 .. 50.0 -> {
+                        marker.title = "Good enough"
+                    }
+                    in 50.0 .. 60.0 -> {
+                        marker.title = "Noisy"
+                    }
+                    else -> {
+                        marker.title = "Loud"
+                    }
+                }
+                marker.subDescription = "Noise(Db): $noise\nRecorded: $time"
+                marker.position = point
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                marker.icon = ContextCompat.getDrawable(
+                    activity as MainActivity,
+                    R.drawable.ic_noise
+                )
+                map.overlays.add(marker)
+            }
+        }
+
     }
 
     override fun onPause() {
