@@ -23,7 +23,7 @@ class MyApplication : Application() {
         const val SHARED_NAME: String = "sharedData.data"
         const val FREQUENCY_STRING: String = "frequency"
         const val MAIN_API_URL: String = "https://api.smltg.eu/"
-        const val BLOCKCHAIN_API_URL: String = "http://192.168.0.21:3000/"
+        const val BLOCKCHAIN_API_URL: String = "http://192.168.31.223:3000/"
     }
 
     override fun onCreate() {
@@ -55,14 +55,17 @@ class MyApplication : Application() {
 
     /** okHTTP */
     private fun getRequest(url: String, resource: String): String {
+        var result = ""
         val request = Request.Builder()
             .url(url + resource)
             .build()
-
-        okClient.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            return response.body!!.string()
+        try {
+            val response = okClient.newCall(request).execute()
+            result =  response.body!!.string()
+        }catch (ex: Exception) {
+            println("GET REQUEST ERROR " + ex.message)
         }
+        return result
     }
 
     private fun postRequest(url: String, resource: String, postBody: String): String {
