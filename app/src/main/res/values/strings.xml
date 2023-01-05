@@ -1,9 +1,32 @@
 <resources>
     <string name="app_name">StudApp</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- __ fragment TODO -->
     <string name="etMessageHint">Message</string>
     <string name="btnSend">Send</string>
+
+    <!-- Settings fragment -->
     <string name="tvFrequency">Frequency (s)</string>
     <string name="btnSave">Save</string>
+    <string name="btnOpenDev">Open dev menu</string>
+
+    <!-- DEV fragment -->
+    <string name="btnDevGetReq">Get request</string>
+    <string name="btnDevPostReq">Post request</string>
+    <string name="response">response</string>
+    <string name="devTitle">Dev options</string>
+    <string name="DevOkHttpTitle">OkHttp Requests</string>
+    <string name="DevSimulatedTitle">Simulate Work</string>
+    <string name="DevSimLocation">Location</string>
+    <string name="DevSimRange">Decibel range</string>
+    <string name="DevSimRangeIndicator">-</string>
+    <string name="DevSimRangeMin">min</string>
+    <string name="DevSimRangeMax">max</string>
+    <string name="DevSimInterval">Interval</string>
+    <string name="DevSimIntervalSeconds">seconds</string>
+    <string name="DevSimRepeat">Repetitions</string>
+    <string name="etDevSimRepeat">Repeat</string>
+    <string name="DevSimStart">Start Simulation</string>
+    <string name="DevSimStop">Stop Simulation</string>
 </resources>
