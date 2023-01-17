@@ -14,8 +14,6 @@ import com.example.studapp.databinding.FragmentMessagesBinding
 import com.example.studapp.utils.SerializableMessageObject
 import com.google.gson.Gson
 
-
-
 class MessagesFragment : Fragment() {
 
     private var _binding: FragmentMessagesBinding? = null
@@ -25,7 +23,7 @@ class MessagesFragment : Fragment() {
     private var selectedMessages: MutableList<SerializableMessageObject> = mutableListOf()
     private var categoryArray = arrayListOf("Select Category")
     private var selectedCategory: String = "Select Category"
-    private lateinit var arrayAdapter: ArrayAdapter<String>
+    private var arrayAdapter: ArrayAdapter<String>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
     private var adapter:
             RecyclerView.Adapter<MessagesAdapter.ViewHolder>? = null
@@ -64,14 +62,28 @@ class MessagesFragment : Fragment() {
             adapter?.notifyDataSetChanged()
         }
 
+        binding.efBtnInsert.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+                .replace(R.id.baseFragment, HomeFragment())
+                .commit()
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        adapter = null
+        arrayAdapter = null
+        layoutManager = null
     }
 
-    fun filterCategories(){
+    private fun filterCategories(){
         selectedMessages.removeAll(selectedMessages)
         for(message in messages) {
             if(message.category == selectedCategory || selectedCategory == "Select Category") {
@@ -80,8 +92,8 @@ class MessagesFragment : Fragment() {
         }
     }
 
-    fun fillCategories(){
-        if(!messages.isEmpty()) {
+    private fun fillCategories(){
+        if(messages.isNotEmpty()) {
             for(message in messages) {
                 val category = message.category
                 if(!categoryArray.contains(category)){
@@ -91,7 +103,7 @@ class MessagesFragment : Fragment() {
         }
     }
 
-    fun getMessagesFromAPI() {
+    private fun getMessagesFromAPI() {
         val response = app.getMainRequest("messages")
         messages = Gson().fromJson(response, Array<SerializableMessageObject>::class.java).toList()
     }
