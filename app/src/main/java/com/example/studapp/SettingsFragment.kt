@@ -38,24 +38,10 @@ class SettingsFragment : Fragment()  {
             val newFrequency = binding.slFrequency.value
             val newRecordingSetting = binding.recorderSetting.isChecked
             if(app.saveFrequency(newFrequency) && app.saveRecordSetting(newRecordingSetting)){
-                Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Settings Saved", Toast.LENGTH_SHORT).show()
             }else{
-                Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Settings Error", Toast.LENGTH_SHORT).show()
             }
-            /*if (newFrequency != app.frequency) {
-                val editor: SharedPreferences.Editor = app.sharedPref.edit()
-                try {
-                    app.frequency = newFrequency
-                    editor.putFloat(MyApplication.FREQUENCY_STRING, newFrequency)
-                    editor.apply()
-                    Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show()
-                } catch (ex: Exception) {
-                    Timber.tag("SharedPref").e(ex.message.toString())
-                    Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(activity, "Already set", Toast.LENGTH_SHORT).show()
-            }*/
         }
 
         binding.btnOpenDev.setOnClickListener {
