@@ -54,6 +54,7 @@ class SettingsFragment : Fragment()  {
         binding.btnOpenDev.setOnClickListener {
             parentFragmentManager.beginTransaction().apply {
                 replace(R.id.baseFragment, DevFragment())
+                addToBackStack(null)
                 commit()
             }
         }

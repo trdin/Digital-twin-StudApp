@@ -29,4 +29,13 @@
     <string name="etDevSimRepeat">Repeat</string>
     <string name="DevSimStart">Start Simulation</string>
     <string name="DevSimStop">Stop Simulation</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cv_content_description">Message Item</string>
+    <string name="ic_message_content_description">Icon</string>
+    <string name="tv_category">Category</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius.</string>
+    <string name="efBtnInsert">Insert</string>
+    <string name="ac_textview_select_category">Select Category</string>
+    <string name="il_hint_category">Category</string>
 </resources>

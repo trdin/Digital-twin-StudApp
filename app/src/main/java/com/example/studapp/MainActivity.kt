@@ -26,6 +26,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.round
 
@@ -96,13 +98,14 @@ class MainActivity : AppCompatActivity() {
         val homeFragment: Fragment = HomeFragment()
         val mapFragment: Fragment = MapFragment()
         val settingsFragment: Fragment = SettingsFragment()
+        val messagesFragment: Fragment = MessagesFragment()
 
-        replaceFragment(homeFragment)
+        replaceFragment(messagesFragment)
 
         binding.btvNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.icHome -> {
-                    replaceFragment(homeFragment)
+                    replaceFragment(messagesFragment)
                     true
                 }
                 R.id.icMap -> {
@@ -141,14 +144,15 @@ class MainActivity : AppCompatActivity() {
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, ((app.frequency * 1000).toLong()))
                     val noiseDb = round(noiseRecorder.noiseLevel)
-
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
+                    val time = Calendar.getInstance().time
                     try {
                         if (lastLocation != null) {
                             val jsonObj = NoiseJsonObject()
                             jsonObj.noise = noiseDb
                             jsonObj.lat = lastLocation!!.latitude.toString()
                             jsonObj.lon = lastLocation!!.longitude.toString()
-                            jsonObj.time = Date().toString()
+                            jsonObj.time = simpleDateFormat.format(time).toString()
 
                             app.postChain("noise", Gson().toJson(jsonObj))
                         }
