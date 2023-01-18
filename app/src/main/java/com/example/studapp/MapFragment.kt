@@ -77,43 +77,47 @@ class MapFragment : Fragment() {
         return binding.root
     }
 
-    private fun drawMarkersFromData(){
+    private fun drawMarkersFromData() {
 
         val noiseData = app.getRequestChain("")
 //        val noiseData = app.getRequestChain("noise") Needs to be implemented
-        if(noiseData.isNotEmpty()) {
-            val jArray = JSONArray(noiseData)
-            for(i in 0 until jArray.length()) {
-                var lat  = 0.0
-                var lon  = 0.0
+        if (noiseData.isNotEmpty()) {
+            val jArray = try {
+                JSONArray(noiseData)
+            } catch (ex: Exception) {
+                JSONArray("[]")
+            }
+            for (i in 0 until jArray.length()) {
+                var lat = 0.0
+                var lon = 0.0
                 var time = ""
                 var noise = 0.0
                 val jObject: JSONObject = jArray[i] as JSONObject
-                if(jObject.has("lat")) {
+                if (jObject.has("lat")) {
                     lat = jObject.getString("lat").toDouble()
                 }
-                if(jObject.has("lon")) {
+                if (jObject.has("lon")) {
                     lon = jObject.getString("lon").toDouble()
                 }
-                if(jObject.has("time")) {
+                if (jObject.has("time")) {
                     time = jObject.getString("time")
                 }
-                if(jObject.has("noise")) {
+                if (jObject.has("noise")) {
                     noise = jObject.getString("noise").toDouble()
                 }
                 val point = GeoPoint(lat, lon)
                 val marker = Marker(map)
-                when(noise) {
-                    in 0.0 .. 35.0-> {
+                when (noise) {
+                    in 0.0..35.0 -> {
                         marker.title = "Exceptional"
                     }
-                    in 35.0 .. 45.00 -> {
+                    in 35.0..45.00 -> {
                         marker.title = "Excellent"
                     }
-                    in 45.0 .. 50.0 -> {
+                    in 45.0..50.0 -> {
                         marker.title = "Good enough"
                     }
-                    in 50.0 .. 60.0 -> {
+                    in 50.0..60.0 -> {
                         marker.title = "Noisy"
                     }
                     else -> {
@@ -135,14 +139,14 @@ class MapFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if(updateTextTask != null) {
+        if (updateTextTask != null) {
             mainHandler.removeCallbacks(updateTextTask!!)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if(updateTextTask != null) {
+        if (updateTextTask != null) {
             mainHandler.post(updateTextTask!!)
         }
     }
