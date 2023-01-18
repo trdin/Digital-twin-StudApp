@@ -2,6 +2,7 @@ package com.example.studapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +42,10 @@ class MessagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("aaa", "view created");
         getMessagesFromAPI()
         fillCategories()
+
         // Set adapter for drop down menu
         val dropDownMenu: AutoCompleteTextView = binding.tvCategories
         arrayAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryArray)
@@ -75,6 +78,12 @@ class MessagesFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val dropDownMenu: AutoCompleteTextView = binding.tvCategories
+        arrayAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryArray)
+        dropDownMenu.setAdapter(arrayAdapter)
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -93,8 +102,11 @@ class MessagesFragment : Fragment() {
         if(messages.isNotEmpty()) {
             for(message in messages) {
                 val category = message.category
+                Log.d("aaa", category)
+
                 if(!categoryArray.contains(category)){
                     categoryArray.add(category)
+                    Log.d("aaa", category)
                 }
             }
         }
