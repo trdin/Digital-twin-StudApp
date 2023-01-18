@@ -12,6 +12,7 @@ import com.example.studapp.databinding.FragmentDevBinding
 import com.example.studapp.utils.NoiseJsonObject
 import com.google.gson.Gson
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class DevFragment : Fragment() {
@@ -138,7 +139,8 @@ class DevFragment : Fragment() {
                 jsonObj.noise = noiseDb
                 jsonObj.lat = lat
                 jsonObj.lon = lon
-                jsonObj.time = Date().toString()
+                val time = Calendar.getInstance().time
+                jsonObj.time = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH).format(time).toString()
 
                 println(Gson().toJson(jsonObj))
                 app.postChain("noise", Gson().toJson(jsonObj))
