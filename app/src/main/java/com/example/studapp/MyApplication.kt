@@ -18,6 +18,7 @@ class MyApplication : Application() {
     lateinit var sharedPref: SharedPreferences
     lateinit var okClient: OkHttpClient
     var frequency = 1.0f
+    var recordSetting = false;
 
     companion object {
         const val NOISE_HIGH_LIMIT = 80
@@ -28,6 +29,7 @@ class MyApplication : Application() {
 
         const val SHARED_NAME: String = "sharedData.data"
         const val FREQUENCY_STRING: String = "frequency"
+        const val RECORD_STRING: String = "record"
         const val MAIN_API_URL: String = "https://api.smltg.eu/"
 //        const val MAIN_API_URL: String = "http://192.168.1.115:8080/"
 
@@ -62,6 +64,16 @@ class MyApplication : Application() {
             }
         } else {
             frequency = sharedPref.getFloat(FREQUENCY_STRING, 10f)
+        }
+        if (!sharedPref.contains(RECORD_STRING)) {
+            try {
+                editor.putBoolean(RECORD_STRING, false)
+                editor.apply()
+            } catch (ex: Exception) {
+                Timber.tag("SharedPref").e(ex.message.toString())
+            }
+        } else {
+            recordSetting = sharedPref.getBoolean(RECORD_STRING, false)
         }
     }
 
@@ -131,5 +143,31 @@ class MyApplication : Application() {
 
     fun postChain(resource: String, postBody: String): String {
         return postRequest(BLOCKCHAIN_API_URL, resource, postBody)
+    }
+
+    fun saveFrequency(freq:Float): Boolean{
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+        return try {
+            frequency = freq
+            editor.putFloat(FREQUENCY_STRING, frequency)
+            editor.apply()
+            true
+        } catch (ex: Exception) {
+            Timber.tag("SharedPref").e(ex.message.toString())
+            false
+        }
+    }
+
+    fun saveRecordSetting(rec:Boolean): Boolean{
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+        return try {
+            recordSetting = rec
+            editor.putBoolean(RECORD_STRING, recordSetting)
+            editor.apply()
+            true
+        } catch (ex: Exception) {
+            Timber.tag("SharedPref").e(ex.message.toString())
+            false
+        }
     }
 }

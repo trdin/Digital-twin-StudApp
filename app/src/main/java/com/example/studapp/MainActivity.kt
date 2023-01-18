@@ -174,9 +174,6 @@ class MainActivity : AppCompatActivity() {
                                 app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
                             }
                         }
-                    } catch (ex: IOException) {
-                        Timber.tag("dev_post_req").e(ex)
-                        mainHandler.removeCallbacks(updateTextTask!!)
                     }
                     //noise, lat, lon , time.
                 }
