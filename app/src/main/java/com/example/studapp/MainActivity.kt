@@ -73,9 +73,6 @@ class MainActivity : AppCompatActivity() {
             for (b in result.values) {
                 allAreGranted = allAreGranted && b
             }
-
-            Log.d("aaa", "$allAreGranted")
-
             if (allAreGranted) {
                 initCheckLocationSettings()
                 //initMap() if settings are ok
@@ -95,7 +92,6 @@ class MainActivity : AppCompatActivity() {
             val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
             ActivityCompat.requestPermissions(this, permissions,0)
         }*/
-        val homeFragment: Fragment = HomeFragment()
         val mapFragment: Fragment = MapFragment()
         val settingsFragment: Fragment = SettingsFragment()
         val messagesFragment: Fragment = MessagesFragment()
@@ -157,8 +153,8 @@ class MainActivity : AppCompatActivity() {
                                 app.postChain("noise", Gson().toJson(jsonNoiseObj))
                                 if (noiseDb > MyApplication.NOISE_HIGH_LIMIT) {
                                     val jsonMsgObj = MessageJsonObject()
-                                    jsonMsgObj.content = "very loud: ${jsonNoiseObj.noise}db"
-                                    jsonMsgObj.category = "noise-warning"
+                                    jsonMsgObj.content = "Very loud: ${jsonNoiseObj.noise}Db"
+                                    jsonMsgObj.category = "Noise warning"
                                     jsonMsgObj.latitude = jsonNoiseObj.lat
                                     jsonMsgObj.longitude = jsonNoiseObj.lon
                                     jsonMsgObj.time = Date().toString()
@@ -166,8 +162,8 @@ class MainActivity : AppCompatActivity() {
                                 }
                                 if (noiseDb < MyApplication.NOISE_LOW_LIMIT) {
                                     val jsonMsgObj = MessageJsonObject()
-                                    jsonMsgObj.content = "quiet place: ${jsonNoiseObj.noise}db"
-                                    jsonMsgObj.category = "noise-quiet"
+                                    jsonMsgObj.content = "Quiet place: ${jsonNoiseObj.noise}Db"
+                                    jsonMsgObj.category = "Noise quiet"
                                     jsonMsgObj.latitude = jsonNoiseObj.lat
                                     jsonMsgObj.longitude = jsonNoiseObj.lon
                                     jsonMsgObj.time = Date().toString()
@@ -233,8 +229,6 @@ class MainActivity : AppCompatActivity() {
                 requestingLocationUpdates = true
                 startLocationUpdates()
             }
-        } else {
-            Log.d("aaa", "Stop something")
         }
     }
 
@@ -267,7 +261,6 @@ class MainActivity : AppCompatActivity() {
                     )
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
-                    Log.d("aaa", "Settings Location sendEx??")
                 }
             }
         }

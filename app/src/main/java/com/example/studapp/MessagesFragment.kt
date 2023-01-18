@@ -42,7 +42,6 @@ class MessagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("aaa", "view created");
         getMessagesFromAPI()
         fillCategories()
 
@@ -96,17 +95,17 @@ class MessagesFragment : Fragment() {
                 selectedMessages.add(message)
             }
         }
+        selectedMessages.sortByDescending {
+            it.time
+        }
     }
 
     private fun fillCategories(){
         if(messages.isNotEmpty()) {
             for(message in messages) {
                 val category = message.category
-                Log.d("aaa", category)
-
                 if(!categoryArray.contains(category)){
                     categoryArray.add(category)
-                    Log.d("aaa", category)
                 }
             }
         }

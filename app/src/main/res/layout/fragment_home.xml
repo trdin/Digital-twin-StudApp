@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:minHeight="360dp"
         android:layout_centerInParent="true"
-        app:cardBackgroundColor="@color/white"
+        style="@style/CardViewStyle"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
@@ -37,6 +37,7 @@
                 android:layout_marginTop="40dp"
                 android:gravity="top"
                 android:hint="@string/il_hint_category"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -58,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                android:hint="Message"
+                android:hint="@string/ti_message"
                 android:minWidth="88dp"
                 app:counterEnabled="true"
                 app:counterMaxLength="40"
@@ -99,7 +100,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_camera"
-        android:contentDescription="OpenCameraButton"
+        android:contentDescription="@string/btn_desc_open_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

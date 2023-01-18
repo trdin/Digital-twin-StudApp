@@ -27,12 +27,8 @@ class SettingsFragment : Fragment()  {
         super.onViewCreated(view, savedInstanceState)
         app = (activity?.application as MyApplication)
         (activity as MainActivity).supportActionBar?.title = "Settings"
-
-
-        binding.slFrequency.value = app.frequency
-        binding.swRecorderSetting.isChecked = app.recordSetting
-        binding.slFrequency.isEnabled = app.recordSetting
-
+        //Set button and switch to users prefs.
+        setItems()
         binding.swRecorderSetting.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 binding.tvSwitchStatus.setText("Enabled")
@@ -61,5 +57,16 @@ class SettingsFragment : Fragment()  {
             }
         }
 
+    }
+
+    fun setItems() {
+        binding.slFrequency.value = app.frequency
+        binding.slFrequency.isEnabled = app.recordSetting
+        binding.swRecorderSetting.isChecked = app.recordSetting
+        if(app.recordSetting) {
+            binding.tvSwitchStatus.setText("Enabled")
+        }else {
+            binding.tvSwitchStatus.setText("Disabled")
+        }
     }
 }
