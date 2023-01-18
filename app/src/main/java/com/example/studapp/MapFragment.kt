@@ -83,7 +83,6 @@ class MapFragment : Fragment() {
     private fun drawMarkersFromData() {
 
         val noiseData = app.getRequestChain("noise")
-//        val noiseData = app.getRequestChain("noise") Needs to be implemented
         if (noiseData.isNotEmpty()) {
             val jArray = try {
                 JSONArray(noiseData)

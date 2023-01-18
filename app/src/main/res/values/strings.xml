@@ -43,6 +43,8 @@
     <string name="frequencyslider">FrequencySlider</string>
     <string name="tv_noise_recording">Noise Recorder</string>
     <string name="efBtnSave">Save</string>
+    <string name="ti_message">Message</string>
+    <string name="btn_desc_open_camera">OpenCameraButton</string>
 
     <string-array name="categories">
         <item>Study</item>
