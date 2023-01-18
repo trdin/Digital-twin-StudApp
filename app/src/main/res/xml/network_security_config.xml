@@ -2,5 +2,13 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.31.223</domain>
+        <domain includeSubdomains="true">192.168.1.115</domain>
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
+        <!--    DON'T FORGET!!!!!! NO LOCALHOST    -->
     </domain-config>
 </network-security-config>
