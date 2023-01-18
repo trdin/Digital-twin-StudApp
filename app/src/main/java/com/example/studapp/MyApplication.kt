@@ -17,8 +17,8 @@ import java.util.*
 class MyApplication : Application() {
     lateinit var sharedPref: SharedPreferences
     lateinit var okClient: OkHttpClient
-    var frequency = 1.0f
-    var recordSetting = false;
+    var frequency = 5f
+    var recordSetting = false
 
     companion object {
         const val NOISE_HIGH_LIMIT = 80

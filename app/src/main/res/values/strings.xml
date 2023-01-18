@@ -40,6 +40,9 @@
     <string name="efBtnSend">Send</string>
     <string name="ac_textview_select_category">Select Category</string>
     <string name="il_hint_category">Category</string>
+    <string name="frequencyslider">FrequencySlider</string>
+    <string name="tv_noise_recording">Noise Recorder</string>
+    <string name="efBtnSave">Save</string>
 
     <string-array name="categories">
         <item>Study</item>

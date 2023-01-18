@@ -141,38 +141,43 @@ class MainActivity : AppCompatActivity() {
                 override fun run() {
                     val noiseRecorder = NoiseRecorder()
                     noiseRecorder.context = this@MainActivity
-                    //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, ((app.frequency * 1000).toLong()))
-                    val noiseDb = round(noiseRecorder.noiseLevel)
-                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
-                    val time = Calendar.getInstance().time
-                    try {
-                        if (lastLocation != null) {
-                            val jsonNoiseObj = NoiseJsonObject()
-                            jsonNoiseObj.noise = noiseDb
-                            jsonNoiseObj.lat = lastLocation!!.latitude.toString()
-                            jsonNoiseObj.lon = lastLocation!!.longitude.toString()
-                            jsonNoiseObj.time = simpleDateFormat.format(time).toString()
+                    if (app.recordSetting) {
+                        val noiseDb = round(noiseRecorder.noiseLevel)
+                        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
+                        val time = Calendar.getInstance().time
+                        try {
+                            if (lastLocation != null) {
+                                val jsonNoiseObj = NoiseJsonObject()
+                                jsonNoiseObj.noise = noiseDb
+                                jsonNoiseObj.lat = lastLocation!!.latitude.toString()
+                                jsonNoiseObj.lon = lastLocation!!.longitude.toString()
+                                jsonNoiseObj.time = simpleDateFormat.format(time).toString()
 
-                            app.postChain("noise", Gson().toJson(jsonNoiseObj))
-                            if (noiseDb > MyApplication.NOISE_HIGH_LIMIT) {
-                                val jsonMsgObj = MessageJsonObject()
-                                jsonMsgObj.content = "very loud: ${jsonNoiseObj.noise}db"
-                                jsonMsgObj.category = "noise-warning"
-                                jsonMsgObj.latitude = jsonNoiseObj.lat
-                                jsonMsgObj.longitude = jsonNoiseObj.lon
-                                jsonMsgObj.time = Date().toString()
-                                app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
+                                app.postChain("noise", Gson().toJson(jsonNoiseObj))
+                                if (noiseDb > MyApplication.NOISE_HIGH_LIMIT) {
+                                    val jsonMsgObj = MessageJsonObject()
+                                    jsonMsgObj.content = "very loud: ${jsonNoiseObj.noise}db"
+                                    jsonMsgObj.category = "noise-warning"
+                                    jsonMsgObj.latitude = jsonNoiseObj.lat
+                                    jsonMsgObj.longitude = jsonNoiseObj.lon
+                                    jsonMsgObj.time = Date().toString()
+                                    app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
+                                }
+                                if (noiseDb < MyApplication.NOISE_LOW_LIMIT) {
+                                    val jsonMsgObj = MessageJsonObject()
+                                    jsonMsgObj.content = "quiet place: ${jsonNoiseObj.noise}db"
+                                    jsonMsgObj.category = "noise-quiet"
+                                    jsonMsgObj.latitude = jsonNoiseObj.lat
+                                    jsonMsgObj.longitude = jsonNoiseObj.lon
+                                    jsonMsgObj.time = Date().toString()
+                                    app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
+                                }
                             }
-                            if (noiseDb < MyApplication.NOISE_LOW_LIMIT) {
-                                val jsonMsgObj = MessageJsonObject()
-                                jsonMsgObj.content = "quiet place: ${jsonNoiseObj.noise}db"
-                                jsonMsgObj.category = "noise-quiet"
-                                jsonMsgObj.latitude = jsonNoiseObj.lat
-                                jsonMsgObj.longitude = jsonNoiseObj.lon
-                                jsonMsgObj.time = Date().toString()
-                                app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
-                            }
+                        } catch (ex: IOException) {
+                            Timber.tag("dev_post_req").e(ex)
+                            mainHandler.removeCallbacks(updateTextTask!!)
+
                         }
                     }
                     //noise, lat, lon , time.

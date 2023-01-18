@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
                 if (lastLocation != null && insert) {
                     val jsonObj = MessageJsonObject()
                     jsonObj.content = binding.etMessage.text.toString()
-                    jsonObj.category = "text"
+                    jsonObj.category = selectedCategory
                     jsonObj.latitude = lastLocation.latitude.toString()
                     jsonObj.longitude = lastLocation.longitude.toString()
                     jsonObj.time = Date().toString()
