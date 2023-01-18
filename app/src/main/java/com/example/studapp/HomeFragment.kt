@@ -28,7 +28,7 @@ class HomeFragment : Fragment() {
     private lateinit var sendFile: File
     private var sendFileToApi: Boolean = false
     private var arrayAdapter: ArrayAdapter<String>? = null
-    private var selectedCategory:String = ""
+    private var selectedCategory: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +44,12 @@ class HomeFragment : Fragment() {
         app = (activity?.application as MyApplication)
 
         val dropDownMenu: AutoCompleteTextView = binding.tvCategories
-        val categoryArray =  resources.getStringArray(R.array.categories)
-        arrayAdapter =  ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryArray)
+        val categoryArray = resources.getStringArray(R.array.categories)
+        arrayAdapter = ArrayAdapter<String>(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            categoryArray
+        )
         dropDownMenu.setAdapter(arrayAdapter)
 
         dropDownMenu.setOnItemClickListener { parent, _, position, id ->
@@ -55,16 +59,16 @@ class HomeFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             var insert = true
             val lastLocation = (activity as MainActivity).getLastKnownLocation()
-            if(selectedCategory.isEmpty()){
+            if (selectedCategory.isEmpty()) {
                 Toast.makeText(context, "Select category.", Toast.LENGTH_SHORT).show()
                 insert = false
             }
-            if(binding.etMessage.text?.isEmpty() == false) {
-                if(binding.etMessage.text?.length!! > 40) {
+            if (binding.etMessage.text?.isEmpty() == false) {
+                if (binding.etMessage.text?.length!! > 40) {
                     Toast.makeText(context, "Message too long!", Toast.LENGTH_SHORT).show()
                     insert = false
                 }
-            }else {
+            } else {
                 insert = false
                 Toast.makeText(context, "Fill message!", Toast.LENGTH_SHORT).show()
             }
@@ -112,12 +116,18 @@ class HomeFragment : Fragment() {
 
             sendFile = getFileFromURI(uri)
             val lastLocation = (activity as MainActivity).getLastKnownLocation()
-            if (lastLocation != null)
-                app.postImageRequest(
-                    sendFile,
-                    lastLocation.latitude.toString(),
-                    lastLocation.longitude.toString()
-                )
+            if (lastLocation != null) {
+                try {
+                    app.postImageRequest(
+                        sendFile,
+                        lastLocation.latitude.toString(),
+                        lastLocation.longitude.toString()
+                    )
+                    Toast.makeText(context, "Image successfully posted", Toast.LENGTH_SHORT).show()
+                } catch (ex: Exception) {
+                    Toast.makeText(context, "Error with Image", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
