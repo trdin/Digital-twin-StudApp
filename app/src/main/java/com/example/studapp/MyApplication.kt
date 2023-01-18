@@ -21,6 +21,8 @@ class MyApplication : Application() {
     var recordSetting = false;
 
     companion object {
+        const val NOISE_HIGH_LIMIT = 80
+        const val NOISE_LOW_LIMIT = 5
         val MEDIA_TYPE_MARKDOWN = "text/x-markdown; charset=utf-8".toMediaType()
         val MEDIA_TYPE_JSON = "application/json; charset=utf-8".toMediaType()
         val MEDIA_TYPE_PNG = "image/png".toMediaType()

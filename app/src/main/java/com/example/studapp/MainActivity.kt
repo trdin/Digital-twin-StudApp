@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.studapp.databinding.ActivityMainBinding
 import com.example.studapp.location.MyEventLocationSettingsChange
+import com.example.studapp.utils.MessageJsonObject
 import com.example.studapp.utils.NoiseJsonObject
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -27,7 +28,6 @@ import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.round
 
@@ -143,23 +143,36 @@ class MainActivity : AppCompatActivity() {
                     noiseRecorder.context = this@MainActivity
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, ((app.frequency * 1000).toLong()))
-                    if(app.recordSetting) {
-                        val noiseDb = round(noiseRecorder.noiseLevel)
-                        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
-                        val time = Calendar.getInstance().time
-                        try {
-                            if (lastLocation != null) {
-                                val jsonObj = NoiseJsonObject()
-                                jsonObj.noise = noiseDb
-                                jsonObj.lat = lastLocation!!.latitude.toString()
-                                jsonObj.lon = lastLocation!!.longitude.toString()
-                                jsonObj.time = simpleDateFormat.format(time).toString()
+                    val noiseDb = round(noiseRecorder.noiseLevel)
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
+                    val time = Calendar.getInstance().time
+                    try {
+                        if (lastLocation != null) {
+                            val jsonNoiseObj = NoiseJsonObject()
+                            jsonNoiseObj.noise = noiseDb
+                            jsonNoiseObj.lat = lastLocation!!.latitude.toString()
+                            jsonNoiseObj.lon = lastLocation!!.longitude.toString()
+                            jsonNoiseObj.time = simpleDateFormat.format(time).toString()
 
-                                app.postChain("noise", Gson().toJson(jsonObj))
+                            app.postChain("noise", Gson().toJson(jsonNoiseObj))
+                            if (noiseDb > MyApplication.NOISE_HIGH_LIMIT) {
+                                val jsonMsgObj = MessageJsonObject()
+                                jsonMsgObj.content = "very loud: ${jsonNoiseObj.noise}db"
+                                jsonMsgObj.category = "noise-warning"
+                                jsonMsgObj.latitude = jsonNoiseObj.lat
+                                jsonMsgObj.longitude = jsonNoiseObj.lon
+                                jsonMsgObj.time = Date().toString()
+                                app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
                             }
-                        } catch (ex: IOException) {
-                            Timber.tag("dev_post_req").e(ex)
-                            mainHandler.removeCallbacks(updateTextTask!!)
+                            if (noiseDb < MyApplication.NOISE_LOW_LIMIT) {
+                                val jsonMsgObj = MessageJsonObject()
+                                jsonMsgObj.content = "quiet place: ${jsonNoiseObj.noise}db"
+                                jsonMsgObj.category = "noise-quiet"
+                                jsonMsgObj.latitude = jsonNoiseObj.lat
+                                jsonMsgObj.longitude = jsonNoiseObj.lon
+                                jsonMsgObj.time = Date().toString()
+                                app.postMainRequest("messages", Gson().toJson(jsonMsgObj))
+                            }
                         }
                     }
                     //noise, lat, lon , time.
