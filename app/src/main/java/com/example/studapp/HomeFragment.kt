@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.studapp.databinding.FragmentHomeBinding
-import com.example.studapp.utils.ImageJsonObject
 import com.example.studapp.utils.MessageJsonObject
 import com.google.gson.Gson
 import timber.log.Timber
@@ -25,6 +27,8 @@ class HomeFragment : Fragment() {
     private lateinit var app: MyApplication
     private lateinit var sendFile: File
     private var sendFileToApi: Boolean = false
+    private var arrayAdapter: ArrayAdapter<String>? = null
+    private var selectedCategory:String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,20 +42,57 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         app = (activity?.application as MyApplication)
+
+        val dropDownMenu: AutoCompleteTextView = binding.tvCategories
+        val categoryArray =  resources.getStringArray(R.array.categories)
+        arrayAdapter =  ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryArray)
+        dropDownMenu.setAdapter(arrayAdapter)
+
+        dropDownMenu.setOnItemClickListener { parent, _, position, id ->
+            selectedCategory = categoryArray[position]
+        }
+
         binding.btnSend.setOnClickListener {
+            var insert = true
             val lastLocation = (activity as MainActivity).getLastKnownLocation()
+            if(selectedCategory.isEmpty()){
+                Toast.makeText(context, "Select category.", Toast.LENGTH_SHORT).show()
+                insert = false
+            }
+            if(binding.etMessage.text?.isEmpty() == false) {
+                if(binding.etMessage.text?.length!! > 40) {
+                    Toast.makeText(context, "Message too long!", Toast.LENGTH_SHORT).show()
+                    insert = false
+                }
+            }else {
+                insert = false
+                Toast.makeText(context, "Fill message!", Toast.LENGTH_SHORT).show()
+            }
             try {
-                if (lastLocation != null) {
+                if (lastLocation != null && insert) {
                     val jsonObj = MessageJsonObject()
                     jsonObj.content = binding.etMessage.text.toString()
-                    jsonObj.category = "text"
+                    jsonObj.category = selectedCategory
                     jsonObj.latitude = lastLocation.latitude.toString()
                     jsonObj.longitude = lastLocation.longitude.toString()
                     jsonObj.time = Date().toString()
                     app.postMainRequest("messages", Gson().toJson(jsonObj))
+                    Toast.makeText(context, "Message added!", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_left,
+                            R.anim.slide_out_right
+                        )
+                        .replace(R.id.baseFragment, MessagesFragment())
+                        .commit()
                 }
             } catch (ex: Exception) {
                 Timber.tag("Post message").e(ex)
+                Toast.makeText(context, "Insertion failure!", Toast.LENGTH_SHORT).show()
+                binding.etMessage.text?.clear()
+                binding.tvCategories.setText("Select Category")
             }
         }
         binding.btnSendImg.setOnClickListener {

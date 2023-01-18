@@ -1,6 +1,5 @@
 package com.example.studapp
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.studapp.databinding.FragmentSettingsBinding
-import timber.log.Timber
 
 
 class SettingsFragment : Fragment()  {
@@ -32,11 +30,22 @@ class SettingsFragment : Fragment()  {
 
 
         binding.slFrequency.value = app.frequency
-        binding.recorderSetting.isChecked = app.recordSetting
+        binding.swRecorderSetting.isChecked = app.recordSetting
+        binding.slFrequency.isEnabled = app.recordSetting
+
+        binding.swRecorderSetting.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                binding.tvSwitchStatus.setText("Enabled")
+                binding.slFrequency.isEnabled = true
+            }else {
+                binding.tvSwitchStatus.setText("Disabled")
+                binding.slFrequency.isEnabled = false
+            }
+        }
 
         binding.btnSave.setOnClickListener {
             val newFrequency = binding.slFrequency.value
-            val newRecordingSetting = binding.recorderSetting.isChecked
+            val newRecordingSetting = binding.swRecorderSetting.isChecked
             if(app.saveFrequency(newFrequency) && app.saveRecordSetting(newRecordingSetting)){
                 Toast.makeText(activity, "Settings Saved", Toast.LENGTH_SHORT).show()
             }else{

@@ -17,8 +17,8 @@ import java.util.*
 class MyApplication : Application() {
     lateinit var sharedPref: SharedPreferences
     lateinit var okClient: OkHttpClient
-    var frequency = 1.0f
-    var recordSetting = false;
+    var frequency = 5f
+    var recordSetting = false
 
     companion object {
         const val NOISE_HIGH_LIMIT = 80
@@ -62,7 +62,7 @@ class MyApplication : Application() {
             } catch (ex: Exception) {
                 Timber.tag("SharedPref").e(ex.message.toString())
             }
-        } else {
+        }else {
             frequency = sharedPref.getFloat(FREQUENCY_STRING, 10f)
         }
         if (!sharedPref.contains(RECORD_STRING)) {
@@ -85,8 +85,8 @@ class MyApplication : Application() {
             .build()
         try {
             val response = okClient.newCall(request).execute()
-            result = response.body!!.string()
-        } catch (ex: Exception) {
+            result =  response.body!!.string()
+        }catch (ex: Exception) {
             println("GET REQUEST ERROR " + ex.message)
         }
         return result
