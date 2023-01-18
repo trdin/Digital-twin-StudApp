@@ -5,6 +5,7 @@
     <!-- __ fragment TODO -->
     <string name="etMessageHint">Message</string>
     <string name="btnSend">Send</string>
+    <string name="btnSendImg">Send Image</string>
 
     <!-- Settings fragment -->
     <string name="tvFrequency">Frequency (s)</string>
