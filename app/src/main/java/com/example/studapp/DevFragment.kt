@@ -98,7 +98,8 @@ class DevFragment : Fragment() {
             }
         }
 
-        binding.btnDevPostReq.setOnClickListener {
+
+        /*binding.btnDevPostReq.setOnClickListener {
             try {
                 val strRes = """
                     |{"name": "Tester",
@@ -119,7 +120,7 @@ class DevFragment : Fragment() {
             } catch (ex: IOException) {
                 binding.tvDevPostReq.text = ex.toString()
             }
-        }
+        }*/
     }
 
     override fun onPause() {

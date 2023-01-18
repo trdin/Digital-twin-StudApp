@@ -16,15 +16,6 @@
         app:layout_constraintStart_toStartOf="@+id/tvDevOkHttpTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvDevOkHttpTitle" />
 
-    <Button
-        android:id="@+id/btnDevPostReq"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/btnDevPostReq"
-        app:layout_constraintStart_toStartOf="@+id/btnDevGetReq"
-        app:layout_constraintTop_toBottomOf="@+id/btnDevGetReq" />
-
     <TextView
         android:id="@+id/tvDevGetReq"
         android:layout_width="wrap_content"
@@ -34,16 +25,6 @@
         android:text="@string/response"
         app:layout_constraintStart_toEndOf="@+id/btnDevGetReq"
         app:layout_constraintTop_toTopOf="@+id/btnDevGetReq" />
-
-    <TextView
-        android:id="@+id/tvDevPostReq"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:maxLines="3"
-        android:text="@string/response"
-        app:layout_constraintStart_toEndOf="@+id/btnDevPostReq"
-        app:layout_constraintTop_toTopOf="@+id/btnDevPostReq" />
 
     <TextView
         android:id="@+id/tvDevTitle"
@@ -75,7 +56,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/DevSimulatedTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDevPostReq" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDevGetReq" />
 
     <Spinner
         android:id="@+id/spDevSimulatedPlaces"

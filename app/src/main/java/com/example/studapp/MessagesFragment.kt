@@ -113,7 +113,8 @@ class MessagesFragment : Fragment() {
 
     private fun getMessagesFromAPI() {
         val response = app.getMainRequest("messages")
-        messages = Gson().fromJson(response, Array<SerializableMessageObject>::class.java).toList()
+        messages = Gson().fromJson(response, Array<SerializableMessageObject>::class.java).toList().asReversed()
     }
+
 }
 
