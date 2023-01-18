@@ -33,9 +33,9 @@ class MyApplication : Application() {
         const val MAIN_API_URL: String = "https://api.smltg.eu/"
 //        const val MAIN_API_URL: String = "http://192.168.1.115:8080/"
 
-        //const val BLOCKCHAIN_API_URL: String = "http://192.168.31.223:3000/"
-        const val BLOCKCHAIN_API_URL: String =
-            "https://httpstat.us/200/" // Dev URL use, when not using chain
+//        const val BLOCKCHAIN_API_URL: String = "https://chainapi.smltg.eu/"
+        // Dev URL use, when not using chain
+        const val BLOCKCHAIN_API_URL: String = "https://httpstat.us/200/"
     }
 
     override fun onCreate() {

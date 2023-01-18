@@ -56,12 +56,13 @@ class MapFragment : Fragment() {
 
         updateTextTask = object : Runnable {
             override fun run() {
-                mainHandler.postDelayed(this, 10000)
+                mainHandler.postDelayed(this, 20000)
                 userLocation = (activity as MainActivity).getLastKnownLocation()
                 val latitude = userLocation?.latitude
                 val longitude = userLocation?.longitude
                 val point = GeoPoint(latitude!!, longitude!!)
                 val marker = Marker(map)
+                marker.title = "Your location"
                 marker.position = point
                 marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                 marker.icon = ContextCompat.getDrawable(
@@ -69,11 +70,13 @@ class MapFragment : Fragment() {
                     R.drawable.ic_my_location
                 )
                 map.overlays.add(marker)
+                drawMarkersFromData()
+
             }
         }
         mainHandler = Handler(Looper.getMainLooper())
 
-        drawMarkersFromData()
+
         return binding.root
     }
 
