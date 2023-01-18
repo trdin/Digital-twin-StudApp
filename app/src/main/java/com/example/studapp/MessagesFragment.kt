@@ -44,7 +44,7 @@ class MessagesFragment : Fragment() {
         getMessagesFromAPI()
         fillCategories()
         // Set adapter for drop down menu
-        val dropDownMenu: AutoCompleteTextView = binding.autoCompleteTextView
+        val dropDownMenu: AutoCompleteTextView = binding.tvCategories
         arrayAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, categoryArray)
         dropDownMenu.setAdapter(arrayAdapter)
 
@@ -78,9 +78,6 @@ class MessagesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        adapter = null
-        arrayAdapter = null
-        layoutManager = null
     }
 
     private fun filterCategories(){

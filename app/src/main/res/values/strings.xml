@@ -35,8 +35,15 @@
     <string name="cv_content_description">Message Item</string>
     <string name="ic_message_content_description">Icon</string>
     <string name="tv_category">Category</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam varius.</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet consectetur adipiscing elit Etiam varius</string>
     <string name="efBtnInsert">Insert</string>
+    <string name="efBtnSend">Send</string>
     <string name="ac_textview_select_category">Select Category</string>
     <string name="il_hint_category">Category</string>
+
+    <string-array name="categories">
+        <item>Study</item>
+        <item>Restaurant</item>
+        <item>Other</item>
+    </string-array>
 </resources>
