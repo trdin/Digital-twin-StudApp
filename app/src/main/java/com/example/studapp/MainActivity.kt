@@ -143,22 +143,24 @@ class MainActivity : AppCompatActivity() {
                     noiseRecorder.context = this@MainActivity
                     //Log.d("aaa", noiseRecorder.noiseLevel.toString())
                     mainHandler.postDelayed(this, ((app.frequency * 1000).toLong()))
-                    val noiseDb = round(noiseRecorder.noiseLevel)
-                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
-                    val time = Calendar.getInstance().time
-                    try {
-                        if (lastLocation != null) {
-                            val jsonObj = NoiseJsonObject()
-                            jsonObj.noise = noiseDb
-                            jsonObj.lat = lastLocation!!.latitude.toString()
-                            jsonObj.lon = lastLocation!!.longitude.toString()
-                            jsonObj.time = simpleDateFormat.format(time).toString()
+                    if(app.recordSetting) {
+                        val noiseDb = round(noiseRecorder.noiseLevel)
+                        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH)
+                        val time = Calendar.getInstance().time
+                        try {
+                            if (lastLocation != null) {
+                                val jsonObj = NoiseJsonObject()
+                                jsonObj.noise = noiseDb
+                                jsonObj.lat = lastLocation!!.latitude.toString()
+                                jsonObj.lon = lastLocation!!.longitude.toString()
+                                jsonObj.time = simpleDateFormat.format(time).toString()
 
-                            app.postChain("noise", Gson().toJson(jsonObj))
+                                app.postChain("noise", Gson().toJson(jsonObj))
+                            }
+                        } catch (ex: IOException) {
+                            Timber.tag("dev_post_req").e(ex)
+                            mainHandler.removeCallbacks(updateTextTask!!)
                         }
-                    } catch (ex: IOException) {
-                        Timber.tag("dev_post_req").e(ex)
-                        mainHandler.removeCallbacks(updateTextTask!!)
                     }
                     //noise, lat, lon , time.
                 }
