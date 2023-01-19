@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.studapp.databinding.FragmentDevBinding
 import com.example.studapp.utils.NoiseJsonObject
 import com.google.gson.Gson
+import timber.log.Timber
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -143,7 +144,11 @@ class DevFragment : Fragment() {
                 jsonObj.time = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH).format(time).toString()
 
                 println(Gson().toJson(jsonObj))
-                app.postChain("noise", Gson().toJson(jsonObj))
+                try {
+                    app.postChain("noise", Gson().toJson(jsonObj))
+                } catch (ex: IOException) {
+                    Timber.e(ex)
+                }
                 repetitions--
                 mainHandler.postDelayed(this, (interval * 1000).toLong())
             } else simIsRunning = false
