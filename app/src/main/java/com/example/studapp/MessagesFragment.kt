@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.studapp.databinding.FragmentMessagesBinding
 import com.example.studapp.utils.SerializableMessageObject
 import com.google.gson.Gson
+import timber.log.Timber
+import java.io.IOException
 
 class MessagesFragment : Fragment() {
 
@@ -112,8 +114,16 @@ class MessagesFragment : Fragment() {
     }
 
     private fun getMessagesFromAPI() {
-        val response = app.getMainRequest("messages")
-        messages = Gson().fromJson(response, Array<SerializableMessageObject>::class.java).toList().asReversed()
+        try {
+            val response = app.getMainRequest("messages")
+            messages =
+                Gson().fromJson(response, Array<SerializableMessageObject>::class.java).toList()
+                    .asReversed()
+        }catch (ex: IOException) {
+            Timber.tag("dev_post_req").e(ex)
+        }catch(ex: NullPointerException){
+            Timber.tag("dev_post_req").e(ex)
+        }
     }
 
 }
